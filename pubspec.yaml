@@ -1,0 +1,50 @@
+---
+name: my_hero_academia
+description: My hero academia project using flutter for web and mobile
+publish_to: none
+version: 1.0.0+1
+environment:
+  sdk: '>=2.16.2 <3.0.0'
+dependencies:
+  animated_text_kit: ^4.2.1
+  auto_route: any
+  cupertino_icons: ^1.0.4
+  flutter:
+    sdk: flutter
+  google_fonts: ^2.3.1
+  http: ^0.13.4
+  idb_sqflite: any
+  intl: any
+  loading_indicator: any
+  provider: ^6.0.2
+  router_management: ^3.1.0
+  sizer: ^2.0.15
+  sqflite: any
+  vrouter: ^1.2.0+21
+  fluttericon: any
+dev_dependencies:
+  auto_route_generator: any
+  build_runner: null
+  flutter_lints: ^1.0.4
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/heroes/all-might.png
+  - assets/heroes/midoriya1.png
+  - assets/heroes/midoriya2.png
+  - assets/heroes/midoriya3.png
+  - assets/heroes/midoriya4.png
+  - assets/heroes/background/all-might.png
+  - assets/heroes/background/all-might2.jpg
+  - assets/heroes/background/midoriya1.png
+  - assets/heroes/background/midoriya2.png
+  - assets/heroes/background/midoriya3.png
+  - assets/heroes/background/midoriya4.png
+  - assets/heroes/background/midoriya5.png
+  - assets/logo/my_hero_academia_logo.png
+  fonts:
+  - family: MyHeroFont
+    fonts:
+    - asset: fonts/MyHeroAcademia.otf
