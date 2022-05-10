@@ -7,44 +7,55 @@ environment:
   sdk: '>=2.16.2 <3.0.0'
 dependencies:
   animated_text_kit: ^4.2.1
-  auto_route: any
+  auto_route: ^3.2.4
   cupertino_icons: ^1.0.4
   flutter:
     sdk: flutter
-  google_fonts: ^2.3.1
+  fluttericon: ^2.0.0
+  google_fonts: ^2.3.2
   http: ^0.13.4
-  idb_sqflite: any
-  intl: any
-  loading_indicator: any
+  idb_sqflite: ^1.1.0
+  intl: ^0.17.0
+  loading_indicator: ^3.0.3
   provider: ^6.0.2
+  qlevar_router: ^1.5.11
   router_management: ^3.1.0
   sizer: ^2.0.15
-  sqflite: any
+  sqflite: ^2.0.2+1
   vrouter: ^1.2.0+21
-  fluttericon: any
 dev_dependencies:
-  auto_route_generator: any
-  build_runner: null
+  auto_route_generator: ^3.2.3
+  build_runner: ^2.1.10
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
+  lints: ^1.0.1
 flutter:
   uses-material-design: true
   assets:
-  - assets/heroes/all-might.png
-  - assets/heroes/midoriya1.png
-  - assets/heroes/midoriya2.png
-  - assets/heroes/midoriya3.png
-  - assets/heroes/midoriya4.png
-  - assets/heroes/background/all-might.png
-  - assets/heroes/background/all-might2.jpg
-  - assets/heroes/background/midoriya1.png
-  - assets/heroes/background/midoriya2.png
-  - assets/heroes/background/midoriya3.png
-  - assets/heroes/background/midoriya4.png
-  - assets/heroes/background/midoriya5.png
-  - assets/logo/my_hero_academia_logo.png
+    - assets/heroes/all-might.png
+    - assets/heroes/midoriya1.png
+    - assets/heroes/midoriya2.png
+    - assets/heroes/midoriya3.png
+    - assets/heroes/midoriya4.png
+    - assets/heroes/background/all-might.png
+    - assets/heroes/background/all-might-background.png
+    - assets/heroes/background/my-hero-academia-heroes-background.png
+    - assets/heroes/background/My-Hero-Academia-Season-6.jpeg
+    - assets/villains/background/my-hero-academia-villains.jpeg
+    - assets/heroes/background/DekuCrying1.gif
+    - assets/heroes/background/DekuCrying1.mp4
+    - assets/heroes/background/DekuCrying2.gif
+    - assets/villains/background/some-villains.jpeg
+    - assets/villains/background/twice-crying.jpeg
+    - assets/heroes/background/all-might2.jpg
+    - assets/heroes/background/midoriya1.png
+    - assets/heroes/background/midoriya2.png
+    - assets/heroes/background/midoriya3.png
+    - assets/heroes/background/midoriya4.png
+    - assets/heroes/background/midoriya5.png
+    - assets/logo/my_hero_academia_logo.png
   fonts:
-  - family: MyHeroFont
-    fonts:
-    - asset: fonts/MyHeroAcademia.otf
+    - family: MyHeroFont
+      fonts:
+        - asset: fonts/MyHeroAcademia.otf

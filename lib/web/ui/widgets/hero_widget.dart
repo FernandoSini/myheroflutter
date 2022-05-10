@@ -26,6 +26,9 @@ class _HeroWidgetState extends State<HeroWidget>
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
+      height: 300,
+      width:300,
+      color: Colors.red,
       duration: Duration(seconds: 5),
       child: Image.asset("/assets/heroes/${widget.heroName}.png"),
     );

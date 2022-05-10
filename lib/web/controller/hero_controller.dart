@@ -17,10 +17,26 @@ class ControllerHero {
 
     return heroModel;
   } */
-  Future<HeroModel> findHeroByName(String heroName) async {
-    var data = await _heroService?.findHeroByName(heroName);
-    HeroModel heroModel = HeroModel.fromJson(data!);
+  Future<HeroModel?> findHeroByName(String heroName) async {
+    var response = await _heroService?.findHeroByName(heroName);
+    if (response?["statusCode"] >= 200 && response?["statusCode"] <= 299) {
+      HeroModel? heroModel = HeroModel.fromJson(response!["content"]);
 
-    return heroModel;
+      return heroModel;
+    } else {
+      return Future.error(response?["errorContent"]);
+    }
+  }
+
+  Future<List<HeroModel>?> fetchAllHeroes() async {
+    var response = await _heroService?.getAllHeroes();
+    if (response?["statusCode"] >= 200 && response?["statusCode"] <= 299) {
+      List<HeroModel>? heroes =
+          HeroModel.parseJsonToList(response!["content"]).toList();
+
+      return heroes;
+    } else {
+      return Future.error(response?["errorContent"]);
+    }
   }
 }

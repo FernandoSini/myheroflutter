@@ -47,13 +47,12 @@ class HeroService {
     return encodedJson;
   } */
 
-  Future<dynamic> findHeroByName(String heroName) async {
-    var url = "http://192.168.0.22:8080/heroes/$heroName";
+  Future<Map<String, dynamic>>? findHeroByName(String heroName) async {
+    var url = "http://localhost:8080/heroes/$heroName";
 
     try {
       http.Response response = await http.get(Uri.parse(url));
-      if (response.statusCode >= 200 || response.statusCode <= 299) {
-        print(response.body);
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
         var successResponse = {
           "statusCode": response.statusCode,
           "content": jsonDecode(
@@ -62,7 +61,31 @@ class HeroService {
         };
         return successResponse;
       } else {
-        print(response.body);
+        var erroBody = {
+          "statusCode": response.statusCode,
+          "errorContent": jsonDecode(response.body)["erro"]
+        };
+
+        return Future.error(erroBody);
+      }
+    } on Exception catch (e) {
+      throw Future.error(e);
+    }
+  }
+
+  Future<Map<String, dynamic>>? getAllHeroes() async {
+    var url = "http://localhost:8080/heroes";
+
+    try {
+      http.Response response = await http.get(Uri.parse(url));
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        var successResponse = {
+          "statusCode": response.statusCode,
+          "content": const Utf8Decoder(allowMalformed: true)
+              .convert(response.bodyBytes),
+        };
+        return successResponse;
+      } else {
         var erroBody = {
           "statusCode": response.statusCode,
           "errorContent": jsonDecode(response.body)["error"]

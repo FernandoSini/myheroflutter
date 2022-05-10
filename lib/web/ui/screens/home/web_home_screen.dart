@@ -1,7 +1,7 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:qlevar_router/qlevar_router.dart';
 
-import '../../../routes/web_routes.dart';
+import '../../widgets/app_bar_widget.dart';
 
 class WebHomeScreen extends StatefulWidget {
   const WebHomeScreen({Key? key}) : super(key: key);
@@ -18,48 +18,61 @@ class _WebHomeScreenState extends State<WebHomeScreen> {
       backgroundColor: const Color(0xff1418FA),
       extendBody: true,
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        toolbarHeight: 100,
-        automaticallyImplyLeading: false,
-        actions: [
-          SizedBox(
-            width: screenSize.width * 0.5,
-          )
-        ],
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Material(
-              type: MaterialType.transparency,
-              elevation: 0,
-              child: InkWell(
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                onTap: () {
-                  AutoRouter.of(context).replaceNamed(WebRoutes.home);
-                },
-                child: Image.asset(
-                  "assets/logo/my_hero_academia_logo.png",
-                  isAntiAlias: true,
-                  height: 250,
-                  width: 250,
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(100), child: AppBarWidget()),
+      body: ListView(
+        padding: EdgeInsets.only(top: 0),
+        children: [
+          Container(
+            height: screenSize.height,
+            width: screenSize.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    "./assets/heroes/background/My-Hero-Academia-Season-6.jpeg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Stack(
+                      children: <Widget>[
+                        // Stroked text as border.
+                        Text(
+                          "6th Season 2022 Autumn",
+                          style: TextStyle(
+                            wordSpacing: 10,
+                            fontFamily: 'MyHeroFont',
+                            fontSize: 70,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 10
+                              ..color = Colors.black,
+                          ),
+                        ),
+
+                        // Solid text as fill.
+                        Text(
+                          "6th Season 2022 Autumn",
+                          style: const TextStyle(
+                            wordSpacing: 10,
+                            fontFamily: 'MyHeroFont',
+                            fontSize: 70,
+                            color: Colors.yellow,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-            Flexible(
-              child: SizedBox(
-                width: screenSize.width * 2,
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: SizedBox(
-        height: screenSize.height,
-        width: screenSize.width,
+          ),
+        ],
       ),
     );
   }
