@@ -12,9 +12,9 @@ class HeroModel {
       {this.trueName, this.lastName, this.heroName, this.heroRank, this.age});
 
   HeroModel.fromJson(Map<String, dynamic> json) {
-    trueName = json["trueName"] != null ? json["trueName"] : null;
-    lastName = json["lastName"] != null ? json["lastName"] : null;
-    heroName = json["heroName"] != null ? json["heroName"] : null;
+    trueName = json["trueName"];
+    lastName = json["lastName"];
+    heroName = json["heroName"];
     heroRank = json["heroRank"] != null
         ? int.tryParse(json["heroRank"].toString())
         : null;
@@ -29,12 +29,12 @@ class HeroModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["trueName"] = this.trueName;
-    data["lastName"] = this.lastName;
-    data["heroName"] = this.heroName;
-    data["heroRank"] = this.heroRank;
-    data["age"] = this.age;
-    data["images"] = this.images?.toList();
+    data["trueName"] = trueName;
+    data["lastName"] = lastName;
+    data["heroName"] = heroName;
+    data["heroRank"] = heroRank;
+    data["age"] = age;
+    data["images"] = images?.toList();
     return data;
   }
 

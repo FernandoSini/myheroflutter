@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:my_hero_academia/web/controller/hero_controller.dart';
 import 'package:my_hero_academia/web/controller/villain_controller.dart';
 import 'package:my_hero_academia/web/models/VillainModel.dart';
 import 'package:my_hero_academia/web/ui/widgets/villain_tumbnail_widget.dart';
