@@ -1,12 +1,9 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:my_hero_academia/web/controller/hero_controller.dart';
 import 'package:my_hero_academia/web/models/Hero.dart';
-import 'package:my_hero_academia/web/ui/widgets/villain_tumbnail_widget.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
-import '../../../routes/web_routes.dart';
 import '../../widgets/hero_tumbnail_widget.dart';
 
 class WebHeroesScreen extends StatefulWidget {

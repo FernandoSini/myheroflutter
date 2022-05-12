@@ -203,8 +203,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                         Container(
                                           child: Text(
                                             hero!.heroRank != null
-                                                ? "#" +
-                                                    hero!.heroRank!.toString()
+                                                ? "#${hero!.heroRank!}"
                                                 : "# ??",
                                             style: TextStyle(
                                               wordSpacing: 20,
@@ -220,7 +219,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                         // Solid text as fill.
                                         Text(
                                           hero!.heroRank != null
-                                              ? "#" + hero!.heroRank!.toString()
+                                              ? "#${hero!.heroRank!}"
                                               : "# ??",
                                           style: const TextStyle(
                                             wordSpacing: 20,
@@ -266,7 +265,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                         children: <Widget>[
                                           // Stroked text as border.
                                           Text(
-                                            " " + hero!.lastName!.toString(),
+                                            " ${hero!.lastName!}",
                                             style: TextStyle(
                                               wordSpacing: 0,
                                               fontFamily: 'MyHeroFont',
@@ -280,7 +279,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
 
                                           // Solid text as fill.
                                           Text(
-                                            " " + hero!.lastName!.toString(),
+                                            " ${hero!.lastName!}",
                                             style: const TextStyle(
                                               wordSpacing: 20,
                                               fontFamily: 'MyHeroFont',
