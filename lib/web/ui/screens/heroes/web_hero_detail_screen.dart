@@ -1,3 +1,4 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:my_hero_academia/web/controller/hero_controller.dart';
@@ -60,26 +61,17 @@ class _WebHeroDetailScreenState extends State<WebHeroDetailScreen>
   var params = QR.params["heroName"].toString().toLowerCase();
   HeroModel? hero;
   ControllerHero? heroiController;
+  bool onHover = false;
+  ValueNotifier<bool> teste = ValueNotifier(false);
+  Future? _future;
 
   @override
   void initState() {
     heroiController = ControllerHero(context: context);
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() async {
-    /*  print(widget.heroName != null);
-    if (widget.heroName != null &&
-        widget.heroName!.isNotEmpty &&
-        widget.heroName != "Erro".toLowerCase()) {
-      /* hero = await heroiController!
-          .findHeroByName(widget.heroName!)
-          .then((value) => hero = value);*/
-    } else {
-      AutoRouter.of(context).replaceNamed(const WebErrorScreen().path);
-    } */
-    super.didChangeDependencies();
+    _future = Future.delayed(Duration(seconds: 5), () {
+      return heroiController!.findHeroByName(params.toLowerCase());
+    });
   }
 
   @override
@@ -97,9 +89,55 @@ class _WebHeroDetailScreenState extends State<WebHeroDetailScreen>
         toolbarHeight: 100,
         automaticallyImplyLeading: false,
         actions: [
-          SizedBox(
-              //  width: screenSize.width * 0.5,
-              )
+          Container(
+            margin: EdgeInsets.only(right: 40, top: 25),
+            child: Material(
+              type: MaterialType.transparency,
+              elevation: 0,
+              child: InkWell(
+                onTap: () {},
+                onHover: (value) {
+                  setState(() {
+                    onHover = value;
+                  });
+                },
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                child: Stack(
+                  children: <Widget>[
+                    // Stroked text as border.
+                    Container(
+                      color: Colors.transparent,
+                      child: Text(
+                        "Delete Hero",
+                        style: TextStyle(
+                          wordSpacing: 5,
+                          fontFamily: 'MyHeroFont',
+                          fontSize: 50,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 7
+                            ..color = !onHover ? Colors.black : Colors.red,
+                        ),
+                      ),
+                    ),
+
+                    // Solid text as fill.
+                    Text(
+                      "Delete Hero",
+                      style: const TextStyle(
+                        wordSpacing: 5,
+                        fontFamily: 'MyHeroFont',
+                        fontSize: 50,
+                        color: Colors.yellow,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
         leadingWidth: 300,
         leading: Material(
@@ -152,189 +190,184 @@ class _WebHeroDetailScreenState extends State<WebHeroDetailScreen>
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
-              FutureBuilder(
-                future: Future.delayed(Duration(seconds: 5), () {
-                  return heroiController!.findHeroByName(params.toLowerCase());
-                }),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(
-                      height: screenSize.height,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: SizedBox(
-                              height: 200,
-                              child: LoadingIndicator(
-                                strokeWidth: 5,
-                                indicatorType: Indicator.ballClipRotateMultiple,
-                                colors: [
-                                  Colors.yellow,
-                                ],
-                              ),
+              ValueListenableBuilder(
+                  valueListenable: teste,
+                  builder: (context, value, _) {
+                    return FutureBuilder(
+                      future: _future,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                            height: screenSize.height,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: SizedBox(
+                                    height: 200,
+                                    child: LoadingIndicator(
+                                      strokeWidth: 5,
+                                      indicatorType:
+                                          Indicator.ballClipRotateMultiple,
+                                      colors: [
+                                        Colors.yellow,
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if (snapshot.connectionState == ConnectionState.done &&
-                          snapshot.data == null ||
-                      !snapshot.hasData ||
-                      snapshot.hasError) {
-                    return SizedBox(
-                      child: Center(child: Text(snapshot.error!.toString())),
-                    );
-                  } else if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData &&
-                      snapshot.data != null &&
-                      !snapshot.hasError) {
-                    hero = snapshot.data as HeroModel;
+                          );
+                        } else if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                snapshot.data == null ||
+                            !snapshot.hasData ||
+                            snapshot.hasError) {
+                          return SizedBox(
+                            child:
+                                Center(child: Text(snapshot.error!.toString())),
+                          );
+                        } else if (snapshot.connectionState ==
+                                ConnectionState.done &&
+                            snapshot.hasData &&
+                            snapshot.data != null &&
+                            !snapshot.hasError) {
+                          hero = snapshot.data as HeroModel;
 
-                    return SizedBox(
-                      height: screenSize.height,
-                      width: screenSize.width,
-                      child: Stack(
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                          return SizedBox(
+                            height: screenSize.height,
+                            width: screenSize.width,
+                            child: Stack(
+                              children: [
+                                Row(
                                   children: [
                                     const SizedBox(
-                                      height: 100,
+                                      width: 15,
                                     ),
-                                    Stack(
-                                      children: <Widget>[
-                                        // Stroked text as border.
-                                        Container(
-                                          child: Text(
-                                            hero!.heroRank != null
-                                                ? "#${hero!.heroRank!}"
-                                                : "# ??",
-                                            style: TextStyle(
-                                              wordSpacing: 20,
-                                              fontFamily: 'MyHeroFont',
-                                              fontSize: 70,
-                                              foreground: Paint()
-                                                ..style = PaintingStyle.stroke
-                                                ..strokeWidth = 10
-                                                ..color = Colors.black,
-                                            ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 100,
                                           ),
-                                        ),
-                                        // Solid text as fill.
-                                        Text(
-                                          hero!.heroRank != null
-                                              ? "#${hero!.heroRank!}"
-                                              : "# ??",
-                                          style: const TextStyle(
-                                            wordSpacing: 20,
-                                            fontFamily: 'MyHeroFont',
-                                            fontSize: 70,
-                                            color: Colors.yellow,
+                                          Stack(
+                                            children: <Widget>[
+                                              // Stroked text as border.
+                                              Container(
+                                                child: Text(
+                                                  hero!.heroRank != null
+                                                      ? "#${hero!.heroRank!}"
+                                                      : "# ??",
+                                                  style: TextStyle(
+                                                    wordSpacing: 20,
+                                                    fontFamily: 'MyHeroFont',
+                                                    fontSize: 70,
+                                                    foreground: Paint()
+                                                      ..style =
+                                                          PaintingStyle.stroke
+                                                      ..strokeWidth = 10
+                                                      ..color = Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                              // Solid text as fill.
+                                              Text(
+                                                hero!.heroRank != null
+                                                    ? "#${hero!.heroRank!}"
+                                                    : "# ??",
+                                                style: const TextStyle(
+                                                  wordSpacing: 20,
+                                                  fontFamily: 'MyHeroFont',
+                                                  fontSize: 70,
+                                                  color: Colors.yellow,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Stack(
-                                      children: <Widget>[
-                                        // Stroked text as border.
-                                        Container(
-                                          child: Text(
-                                            hero!.trueName!.toString(),
-                                            style: TextStyle(
-                                              wordSpacing: 20,
-                                              fontFamily: 'MyHeroFont',
-                                              fontSize: 70,
-                                              foreground: Paint()
-                                                ..style = PaintingStyle.stroke
-                                                ..strokeWidth = 10
-                                                ..color = Colors.black,
-                                            ),
+                                          Stack(
+                                            children: <Widget>[
+                                              // Stroked text as border.
+                                              Container(
+                                                child: Text(
+                                                  hero!.trueName!.toString(),
+                                                  style: TextStyle(
+                                                    wordSpacing: 20,
+                                                    fontFamily: 'MyHeroFont',
+                                                    fontSize: 70,
+                                                    foreground: Paint()
+                                                      ..style =
+                                                          PaintingStyle.stroke
+                                                      ..strokeWidth = 10
+                                                      ..color = Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                              // Solid text as fill.
+                                              Text(
+                                                hero!.trueName!.toString(),
+                                                style: const TextStyle(
+                                                  wordSpacing: 20,
+                                                  fontFamily: 'MyHeroFont',
+                                                  fontSize: 70,
+                                                  color: Colors.yellow,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        // Solid text as fill.
-                                        Text(
-                                          hero!.trueName!.toString(),
-                                          style: const TextStyle(
-                                            wordSpacing: 20,
-                                            fontFamily: 'MyHeroFont',
-                                            fontSize: 70,
-                                            color: Colors.yellow,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      color: Colors.transparent,
-                                      child: Stack(
-                                        children: <Widget>[
-                                          // Stroked text as border.
-                                          Text(
-                                            " ${hero!.lastName!}",
-                                            style: TextStyle(
-                                              wordSpacing: 0,
-                                              fontFamily: 'MyHeroFont',
-                                              fontSize: 70,
-                                              foreground: Paint()
-                                                ..style = PaintingStyle.stroke
-                                                ..strokeWidth = 10
-                                                ..color = Colors.black,
-                                            ),
-                                          ),
-
-                                          // Solid text as fill.
-                                          Text(
-                                            " ${hero!.lastName!}",
-                                            style: const TextStyle(
-                                              wordSpacing: 20,
-                                              fontFamily: 'MyHeroFont',
-                                              fontSize: 70,
-                                              color: Colors.yellow,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      color: Colors.transparent,
-                                      child: Stack(
-                                        children: <Widget>[
-                                          // Stroked text as border.
                                           Container(
                                             color: Colors.transparent,
-                                            child: Text(
-                                              hero?.age != null
-                                                  ? "age: ${hero!.age.toString()}"
-                                                  : "??",
-                                              style: TextStyle(
-                                                wordSpacing: 10,
-                                                fontFamily: 'MyHeroFont',
-                                                fontSize: 70,
-                                                foreground: Paint()
-                                                  ..style = PaintingStyle.stroke
-                                                  ..strokeWidth = 10
-                                                  ..color = Colors.black,
-                                              ),
+                                            child: Stack(
+                                              children: <Widget>[
+                                                // Stroked text as border.
+                                                Text(
+                                                  " ${hero!.lastName!}",
+                                                  style: TextStyle(
+                                                    wordSpacing: 0,
+                                                    fontFamily: 'MyHeroFont',
+                                                    fontSize: 70,
+                                                    foreground: Paint()
+                                                      ..style =
+                                                          PaintingStyle.stroke
+                                                      ..strokeWidth = 10
+                                                      ..color = Colors.black,
+                                                  ),
+                                                ),
+
+                                                // Solid text as fill.
+                                                Text(
+                                                  " ${hero!.lastName!}",
+                                                  style: const TextStyle(
+                                                    wordSpacing: 20,
+                                                    fontFamily: 'MyHeroFont',
+                                                    fontSize: 70,
+                                                    color: Colors.yellow,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          // Solid text as fill.
-                                          Text(
-                                            hero?.age != null
-                                                ? "age: ${hero!.age.toString()}"
-                                                : "??",
-                                            style: const TextStyle(
-                                              wordSpacing: 10,
-                                              fontFamily: 'MyHeroFont',
-                                              fontSize: 70,
-                                              color: Colors.yellow,
+                                          Container(
+                                            color: Colors.transparent,
+                                            child: BorderedText(
+                                              strokeWidth: 10,
+                                              strokeColor: Colors.black,
+                                              // Stroked text as border.
+                                              // Solid text as fill.
+                                              child: Text(
+                                                hero?.age != null
+                                                    ? "age: ${hero!.age.toString()}"
+                                                    : "??",
+                                                style: const TextStyle(
+                                                  fontFamily: 'MyHeroFont',
+                                                  fontSize: 70,
+                                                  color: Colors.yellow,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -342,72 +375,70 @@ class _WebHeroDetailScreenState extends State<WebHeroDetailScreen>
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          /* PageView(
-                            scrollDirection: Axis.horizontal,
-                            children: hero!.images!
-                                .map(
-                                  (e) => Image.asset(
-                                    "assets/$e",
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                                )
-                                .toList(),
-                          ), */
-                          PageView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Image.asset(
-                                  "assets/heroes/background/all-might2.jpg",
-                                  height: 600,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Stack(
-                              children: <Widget>[
-                                // Stroked text as border.
-                                Container(
-                                  color: Colors.transparent,
-                                  child: Text(
-                                    hero!.heroName!.capitalize(),
-                                    style: TextStyle(
-                                      wordSpacing: 20,
-                                      fontFamily: 'MyHeroFont',
-                                      fontSize: 150,
-                                      foreground: Paint()
-                                        ..style = PaintingStyle.stroke
-                                        ..strokeWidth = 20
-                                        ..color = Colors.black,
+                                /* PageView(
+                                scrollDirection: Axis.horizontal,
+                                children: hero!.images!
+                                    .map(
+                                      (e) => Image.asset(
+                                        "assets/$e",
+                                        fit: BoxFit.fitHeight,
+                                      ),
+                                    )
+                                    .toList(),
+                              ), */
+                                PageView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Image.asset(
+                                        "assets/heroes/background/all-might2.jpg",
+                                        height: 600,
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                                // Solid text as fill.
-                                Text(
-                                  hero!.heroName!.capitalize(),
-                                  style: const TextStyle(
-                                    wordSpacing: 20,
-                                    fontFamily: 'MyHeroFont',
-                                    fontSize: 150,
-                                    color: Colors.yellow,
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      // Stroked text as border.
+                                      Container(
+                                        color: Colors.transparent,
+                                        child: Text(
+                                          hero!.heroName!.capitalize(),
+                                          style: TextStyle(
+                                            wordSpacing: 20,
+                                            fontFamily: 'MyHeroFont',
+                                            fontSize: 135,
+                                            foreground: Paint()
+                                              ..style = PaintingStyle.stroke
+                                              ..strokeWidth = 20
+                                              ..color = Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                      // Solid text as fill.
+                                      Text(
+                                        hero!.heroName!.capitalize(),
+                                        style: const TextStyle(
+                                          wordSpacing: 20,
+                                          fontFamily: 'MyHeroFont',
+                                          fontSize: 135,
+                                          color: Colors.yellow,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
+                          );
+                        }
+                        return Container();
+                      },
                     );
-                  }
-                  return Container();
-                },
-              ),
+                  }),
             ],
           ),
         ),

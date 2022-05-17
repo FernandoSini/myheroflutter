@@ -38,8 +38,11 @@ class VillainController {
 
       return villains;
     } else {
-      print(response);
       return Future.error(response?["errorContent"]);
     }
+  }
+
+  Future<void> createVillain(VillainModel villain) async {
+    final serviceResponse = await _villainService?.createVillain(villain);
   }
 }

@@ -35,8 +35,8 @@ class VillainModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["trueName"] = trueName;
     data["lastName"] = lastName;
-    data["heroName"] = villainName;
-    data["heroRank"] = villainRank;
+    data["villainName"] = villainName;
+    data["villainRank"] = villainRank;
     data["age"] = age;
     data["images"] = images?.toList();
     return data;

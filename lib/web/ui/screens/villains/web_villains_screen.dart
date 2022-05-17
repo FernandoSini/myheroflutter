@@ -151,7 +151,7 @@ class _WebVillainsScreenState extends State<WebVillainsScreen> {
                     snapshot.data == null ||
                 !snapshot.hasData ||
                 snapshot.hasError) {
-              /* return SizedBox(
+              return SizedBox(
                 child: Center(
                   child: /* Text(
                     snapshot.error!.toString(),
@@ -164,7 +164,7 @@ class _WebVillainsScreenState extends State<WebVillainsScreen> {
                         style: TextStyle(
                           wordSpacing: 10,
                           fontFamily: 'MyHeroFont',
-                          fontSize: 70,
+                          fontSize: 50,
                           foreground: Paint()
                             ..style = PaintingStyle.stroke
                             ..strokeWidth = 10
@@ -178,15 +178,15 @@ class _WebVillainsScreenState extends State<WebVillainsScreen> {
                         style: const TextStyle(
                           wordSpacing: 10,
                           fontFamily: 'MyHeroFont',
-                          fontSize: 70,
+                          fontSize: 50,
                           color: Colors.yellow,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ); */
-              QR.to("/error");
+              );
+              //QR.to("/error");
             } else if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData &&
                 snapshot.data != null &&

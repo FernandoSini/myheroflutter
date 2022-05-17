@@ -8,7 +8,9 @@ environment:
 dependencies:
   animated_text_kit: ^4.2.1
   auto_route: ^3.2.4
+  bordered_text: ^2.0.0
   cupertino_icons: ^1.0.4
+  file_picker: ^4.5.1
   flutter:
     sdk: flutter
   fluttericon: ^2.0.0
@@ -16,7 +18,9 @@ dependencies:
   http: ^0.13.4
   idb_sqflite: ^1.1.0
   intl: ^0.17.0
+  jwt_decoder: ^2.0.1
   loading_indicator: ^3.0.3
+  outlined_text: ^1.0.1
   provider: ^6.0.2
   qlevar_router: ^1.5.11
   router_management: ^3.1.0
@@ -41,8 +45,17 @@ flutter:
     - assets/heroes/background/all-might.png
     - assets/heroes/background/all-might-background.png
     - assets/heroes/background/my-hero-academia-heroes-background.png
+    - assets/heroes/background/my_hero_background.png
+    - assets/heroes/background/all-might-midoriya-bakugo.png
+    - assets/heroes/background/all-might-heroes.png
     - assets/heroes/background/My-Hero-Academia-Season-6.jpeg
     - assets/villains/background/my-hero-academia-villains.jpeg
+    - assets/villains/all_for_one_flying.png
+    - assets/villains/all_for_one_flying.png
+    - assets/villains/all-for-one-helping.png
+    - assets/villains/all_for_one.png
+    - assets/villains/all-for-one.png
+    - assets/villains/all-for-one2.png
     - assets/heroes/background/DekuCrying1.gif
     - assets/heroes/background/DekuCrying1.mp4
     - assets/heroes/background/DekuCrying2.gif

@@ -18,7 +18,7 @@ class _VillainThumbnailWidgetState extends State<VillainThumbnailWidget> {
     var screenSize = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
-       QR.toName("HeroDetails", params: {'heroName':widget.villain!.villainName},);
+       QR.toName("VillainDetails", params: {'villainName':widget.villain!.villainName},);
       },
       child: Container(
         height: screenSize.height * 0.15,

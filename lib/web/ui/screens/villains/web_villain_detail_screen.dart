@@ -1,10 +1,11 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:my_hero_academia/web/controller/hero_controller.dart';
+import 'package:my_hero_academia/web/controller/villain_controller.dart';
+import 'package:my_hero_academia/web/models/VillainModel.dart';
 import 'package:my_hero_academia/web/ui/widgets/custom_scroll_bar.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
-import '../../../models/Hero.dart';
 import '../../../utils/captilize_string.dart';
 
 class WebVillainDetailScreen extends StatefulWidget {
@@ -58,12 +59,16 @@ Map<String?, int> heroColor = {
 class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
     with SingleTickerProviderStateMixin {
   var params = QR.params["villainName"].toString().toLowerCase();
-  HeroModel? hero;
-  ControllerHero? heroiController;
-
+  VillainModel? villainModel;
+  VillainController? villainController;
+  bool onHover = false;
+  Future<VillainModel?>? _villainFuture;
   @override
   void initState() {
-    heroiController = ControllerHero(context: context);
+    villainController = VillainController(context: context);
+    _villainFuture = Future.delayed(Duration(seconds: 5), () {
+      return villainController!.findVillainByName(params.toLowerCase());
+    });
     super.initState();
   }
 
@@ -82,9 +87,53 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
         toolbarHeight: 100,
         automaticallyImplyLeading: false,
         actions: [
-          SizedBox(
-              //  width: screenSize.width * 0.5,
-              )
+          Container(
+            margin: EdgeInsets.only(right: 40, top: 25),
+            child: Material(
+              type: MaterialType.transparency,
+              elevation: 0,
+              child: InkWell(
+                onTap: () {},
+                onHover: (value) => setState(() {
+                  onHover = value;
+                }),
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                child: Stack(
+                  children: <Widget>[
+                    // Stroked text as border.
+                    Container(
+                      color: Colors.transparent,
+                      child: Text(
+                        "Delete Villain",
+                        style: TextStyle(
+                          wordSpacing: 5,
+                          fontFamily: 'MyHeroFont',
+                          fontSize: 50,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 7
+                            ..color = !onHover ? Colors.black : Colors.red,
+                        ),
+                      ),
+                    ),
+
+                    // Solid text as fill.
+                    Text(
+                      "Delete Villain",
+                      style: const TextStyle(
+                        wordSpacing: 5,
+                        fontFamily: 'MyHeroFont',
+                        fontSize: 50,
+                        color: Colors.yellow,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
         leadingWidth: 300,
         leading: Material(
@@ -140,9 +189,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
             shrinkWrap: true,
             children: [
               FutureBuilder(
-                future: Future.delayed(Duration(seconds: 5), () {
-                  return heroiController!.findHeroByName(params.toLowerCase());
-                }),
+                future: _villainFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Container(
@@ -171,13 +218,46 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                       !snapshot.hasData ||
                       snapshot.hasError) {
                     return SizedBox(
-                      child: Center(child: Text(snapshot.error!.toString())),
+                      height: MediaQuery.of(context).size.height,
+                      child: Center(
+                        child: /* Text(
+                    snapshot.error!.toString(),
+                    style: TextStyle(color: Colors.white), */
+                            Stack(
+                          children: <Widget>[
+                            // Stroked text as border.
+                            Text(
+                              snapshot.error!.toString(),
+                              style: TextStyle(
+                                wordSpacing: 10,
+                                fontFamily: 'MyHeroFont',
+                                fontSize: 70,
+                                foreground: Paint()
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 10
+                                  ..color = Colors.black,
+                              ),
+                            ),
+
+                            // Solid text as fill.
+                            Text(
+                              snapshot.error!.toString(),
+                              style: const TextStyle(
+                                wordSpacing: 10,
+                                fontFamily: 'MyHeroFont',
+                                fontSize: 70,
+                                color: Colors.yellow,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   } else if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.hasData &&
                       snapshot.data != null &&
                       !snapshot.hasError) {
-                    hero = snapshot.data as HeroModel;
+                    villainModel = snapshot.data as VillainModel;
 
                     return SizedBox(
                       height: screenSize.height,
@@ -202,8 +282,8 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                         // Stroked text as border.
                                         Container(
                                           child: Text(
-                                            hero!.heroRank != null
-                                                ? "#${hero!.heroRank!}"
+                                            villainModel!.villainRank != null
+                                                ? "#${villainModel!.villainRank!}"
                                                 : "# ??",
                                             style: TextStyle(
                                               wordSpacing: 20,
@@ -218,8 +298,8 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                         ),
                                         // Solid text as fill.
                                         Text(
-                                          hero!.heroRank != null
-                                              ? "#${hero!.heroRank!}"
+                                          villainModel!.villainRank != null
+                                              ? "#${villainModel!.villainRank!}"
                                               : "# ??",
                                           style: const TextStyle(
                                             wordSpacing: 20,
@@ -235,7 +315,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                         // Stroked text as border.
                                         Container(
                                           child: Text(
-                                            hero!.trueName!.toString(),
+                                            villainModel!.trueName!.toString(),
                                             style: TextStyle(
                                               wordSpacing: 20,
                                               fontFamily: 'MyHeroFont',
@@ -249,7 +329,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                         ),
                                         // Solid text as fill.
                                         Text(
-                                          hero!.trueName!.toString(),
+                                          villainModel!.trueName!.toString(),
                                           style: const TextStyle(
                                             wordSpacing: 20,
                                             fontFamily: 'MyHeroFont',
@@ -265,7 +345,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                         children: <Widget>[
                                           // Stroked text as border.
                                           Text(
-                                            " ${hero!.lastName!}",
+                                            " ${villainModel!.lastName!}",
                                             style: TextStyle(
                                               wordSpacing: 0,
                                               fontFamily: 'MyHeroFont',
@@ -279,7 +359,7 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
 
                                           // Solid text as fill.
                                           Text(
-                                            " ${hero!.lastName!}",
+                                            " ${villainModel!.lastName!}",
                                             style: const TextStyle(
                                               wordSpacing: 20,
                                               fontFamily: 'MyHeroFont',
@@ -292,39 +372,22 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                     ),
                                     Container(
                                       color: Colors.transparent,
-                                      child: Stack(
-                                        children: <Widget>[
-                                          // Stroked text as border.
-                                          Container(
-                                            color: Colors.transparent,
-                                            child: Text(
-                                              hero?.age != null
-                                                  ? "age: ${hero!.age.toString()}"
-                                                  : "??",
-                                              style: TextStyle(
-                                                wordSpacing: 10,
-                                                fontFamily: 'MyHeroFont',
-                                                fontSize: 70,
-                                                foreground: Paint()
-                                                  ..style = PaintingStyle.stroke
-                                                  ..strokeWidth = 10
-                                                  ..color = Colors.black,
-                                              ),
-                                            ),
+                                      child: BorderedText(
+                                        strokeWidth: 10,
+                                        strokeColor: Colors.black,
+                                        // Stroked text as border.
+
+                                        // Solid text as fill.
+                                        child: Text(
+                                          villainModel?.age != null
+                                              ? "age: ${villainModel!.age.toString()}"
+                                              : "??",
+                                          style: const TextStyle(
+                                            fontFamily: 'MyHeroFont',
+                                            fontSize: 70,
+                                            color: Colors.yellow,
                                           ),
-                                          // Solid text as fill.
-                                          Text(
-                                            hero?.age != null
-                                                ? "age: ${hero!.age.toString()}"
-                                                : "??",
-                                            style: const TextStyle(
-                                              wordSpacing: 10,
-                                              fontFamily: 'MyHeroFont',
-                                              fontSize: 70,
-                                              color: Colors.yellow,
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -363,11 +426,11 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                 Container(
                                   color: Colors.transparent,
                                   child: Text(
-                                    hero!.heroName!.capitalize(),
+                                    villainModel!.villainName!.capitalize(),
                                     style: TextStyle(
                                       wordSpacing: 20,
                                       fontFamily: 'MyHeroFont',
-                                      fontSize: 150,
+                                      fontSize: 120,
                                       foreground: Paint()
                                         ..style = PaintingStyle.stroke
                                         ..strokeWidth = 20
@@ -377,11 +440,11 @@ class _WebVillainDetailScreenState extends State<WebVillainDetailScreen>
                                 ),
                                 // Solid text as fill.
                                 Text(
-                                  hero!.heroName!.capitalize(),
+                                  villainModel!.villainName!.capitalize(),
                                   style: const TextStyle(
                                     wordSpacing: 20,
                                     fontFamily: 'MyHeroFont',
-                                    fontSize: 150,
+                                    fontSize: 120,
                                     color: Colors.yellow,
                                   ),
                                 ),

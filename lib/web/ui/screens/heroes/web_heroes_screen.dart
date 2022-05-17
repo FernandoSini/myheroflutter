@@ -154,7 +154,39 @@ class _WebHeroesScreenState extends State<WebHeroesScreen> {
                 !snapshot.hasData ||
                 snapshot.hasError) {
               return SizedBox(
-                child: Center(child: Text(snapshot.error!.toString())),
+                child: Center(
+                  child: /* Text(
+                    snapshot.error!.toString(),
+                    style: TextStyle(color: Colors.white), */
+                      Stack(
+                    children: <Widget>[
+                      // Stroked text as border.
+                      Text(
+                        snapshot.error!.toString(),
+                        style: TextStyle(
+                          wordSpacing: 10,
+                          fontFamily: 'MyHeroFont',
+                          fontSize: 50,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 10
+                            ..color = Colors.black,
+                        ),
+                      ),
+
+                      // Solid text as fill.
+                      Text(
+                        snapshot.error!.toString(),
+                        style: const TextStyle(
+                          wordSpacing: 10,
+                          fontFamily: 'MyHeroFont',
+                          fontSize: 50,
+                          color: Colors.yellow,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             } else if (snapshot.connectionState == ConnectionState.done &&
                 snapshot.hasData &&

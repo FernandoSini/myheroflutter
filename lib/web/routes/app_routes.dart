@@ -1,3 +1,6 @@
+import 'package:my_hero_academia/web/ui/screens/create/web_create_choose.dart';
+import 'package:my_hero_academia/web/ui/screens/create/web_create_villain_screen.dart';
+import 'package:my_hero_academia/web/ui/screens/create/web_create_hero_screen.dart';
 import 'package:my_hero_academia/web/ui/screens/error/web_error_screen.dart';
 import 'package:my_hero_academia/web/ui/screens/heroes/web_hero_detail_screen.dart';
 import 'package:my_hero_academia/web/ui/screens/heroes/web_heroes_screen.dart';
@@ -145,6 +148,36 @@ class AppRoutes {
               middleware: [],
             ),
           ],
+        ),
+      ],
+    ),
+    QRoute(
+      name: "Create",
+      path: '/create',
+      builder: () => WebCreateChoose(),
+      pageType: QFadePage(
+        opaque: true,
+        transitionDurationMilliseconds: 1000,
+      ),
+      children: [
+        QRoute(
+          name: 'CreateHero',
+          path: '/hero',
+          builder: () => WebCreateHeroScreen(),
+          pageType: QFadePage(
+            opaque: true,
+            transitionDurationMilliseconds: 1000,
+          ),
+        ),
+        QRoute(
+          name: "CreateVillain",
+          path: "/villain",
+          builder: () => WebCreateVillainScreen(),
+          pageType: QFadePage(
+            opaque: true,
+            transitionDurationMilliseconds: 1000,
+          ),
+          middleware: [],
         ),
       ],
     ),

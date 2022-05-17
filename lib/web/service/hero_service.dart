@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:my_hero_academia/web/models/Hero.dart';
+import 'package:my_hero_academia/web/service/default_service.dart';
 
-class HeroService {
+class HeroService extends DefaultService {
   /* Future<String> fetchHeroByName(String heroName) async {
     /* Map<String, dynamic> heroesJson = {
       "trueName": "Izuku",
@@ -67,8 +69,8 @@ class HeroService {
 
         return Future.error(erroBody);
       }
-    } on Exception catch (e) {
-      throw Future.error(e);
+    } on Exception {
+      return Future.error("Sorry, we have a problem with our servers!");
     }
   }
 
@@ -87,13 +89,38 @@ class HeroService {
       } else {
         var erroBody = {
           "statusCode": response.statusCode,
-          "errorContent": jsonDecode(response.body)["error"]
+          "errorContent": jsonDecode(response.body)["erro"]
         };
 
         return erroBody;
       }
-    } on Exception catch (e) {
-      throw Future.error(e);
+    } on Exception {
+      return Future.error("Sorry, we have a problem with our servers!");
+    }
+  }
+
+  Future<Map<String, dynamic>>? createHero(HeroModel hero) async {
+    String url = "localhost:8080/heroes/create";
+    try {
+      final response =
+          await http.post(Uri.parse(url), body: json.encode(hero.toJson()));
+      if (response.statusCode >= 200 && response.statusCode <= 299) {
+        var successResponse = {
+          "statusCode": response.statusCode,
+          "content": const Utf8Decoder(allowMalformed: true)
+              .convert(response.bodyBytes),
+        };
+        return successResponse;
+      } else {
+        var erroBody = {
+          "statusCode": response.statusCode,
+          "errorContent": jsonDecode(response.body)["erro"]
+        };
+
+        return erroBody;
+      }
+    } on Exception {
+      return Future.error("Sorry, we have a problem with our servers!");
     }
   }
 }
