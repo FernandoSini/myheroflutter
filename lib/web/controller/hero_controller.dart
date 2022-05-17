@@ -30,6 +30,7 @@ class ControllerHero {
 
   Future<List<HeroModel>?> fetchAllHeroes() async {
     var response = await _heroService?.getAllHeroes();
+  
     if (response?["statusCode"] >= 200 && response?["statusCode"] <= 299) {
       List<HeroModel>? heroes =
           HeroModel.parseJsonToList(response!["content"]).toList();
@@ -38,5 +39,9 @@ class ControllerHero {
     } else {
       return Future.error(response?["errorContent"]);
     }
+  }
+
+  Future<void> createHero(HeroModel heroModel) async {
+    final response = _heroService?.createHero(heroModel);
   }
 }

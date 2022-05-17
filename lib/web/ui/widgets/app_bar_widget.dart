@@ -144,36 +144,53 @@ class _AppBarWidgetState extends State<AppBarWidget> {
               ),
             ),
           ),
-          Container(
-            child: Stack(
-              children: <Widget>[
-                // Stroked text as border.
-                Container(
-                  color: Colors.transparent,
-                  child: Text(
-                    "Heroes",
-                    style: TextStyle(
-                      wordSpacing: 20,
-                      fontFamily: 'MyHeroFont',
-                      fontSize: 30,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 5
-                        ..color = Colors.black,
+          Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              highlightColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              onHover: (hover) {
+                setState(() {
+                  onHoverList[2] = hover;
+                });
+              },
+              onTap: () {
+                QR.toName("Create");
+              },
+              child: Container(
+                child: Stack(
+                  children: <Widget>[
+                    // Stroked text as border.
+                    Container(
+                      color: Colors.transparent,
+                      child: Text(
+                        "Create",
+                        style: TextStyle(
+                          wordSpacing: 20,
+                          fontFamily: 'MyHeroFont',
+                          fontSize: 30,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 5
+                            ..color =
+                                !onHoverList[2] ? Colors.black : Colors.red,
+                        ),
+                      ),
                     ),
-                  ),
+                    // Solid text as fill.
+                    Text(
+                      "Create",
+                      style: const TextStyle(
+                        wordSpacing: 20,
+                        fontFamily: 'MyHeroFont',
+                        fontSize: 30,
+                        color: Colors.yellow,
+                      ),
+                    ),
+                  ],
                 ),
-                // Solid text as fill.
-                Text(
-                  "Heroes",
-                  style: const TextStyle(
-                    wordSpacing: 20,
-                    fontFamily: 'MyHeroFont',
-                    fontSize: 30,
-                    color: Colors.yellow,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
