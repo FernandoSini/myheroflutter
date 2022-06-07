@@ -5,7 +5,7 @@ import 'package:my_hero_academia/web/controller/hero_controller.dart';
 import 'package:my_hero_academia/web/ui/widgets/custom_scroll_bar.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
-import '../../../models/Hero.dart';
+import '../../../models/hero.dart';
 import '../../../utils/captilize_string.dart';
 
 class WebHeroDetailScreen extends StatefulWidget {

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:my_hero_academia/web/models/Hero.dart';
+import 'package:my_hero_academia/web/models/hero.dart';
+import 'package:my_hero_academia/web/providers/hero_provider.dart';
 import 'package:my_hero_academia/web/service/hero_service.dart';
+import 'package:provider/provider.dart';
 
 class ControllerHero {
   HeroService? _heroService;
@@ -30,7 +32,7 @@ class ControllerHero {
 
   Future<List<HeroModel>?> fetchAllHeroes() async {
     var response = await _heroService?.getAllHeroes();
-  
+
     if (response?["statusCode"] >= 200 && response?["statusCode"] <= 299) {
       List<HeroModel>? heroes =
           HeroModel.parseJsonToList(response!["content"]).toList();
@@ -41,7 +43,20 @@ class ControllerHero {
     }
   }
 
-  Future<void> createHero(HeroModel heroModel) async {
-    final response = _heroService?.createHero(heroModel);
+  Future<void> createHero(HeroModel heroModel, Map<String,dynamic>? file) async {
+    HeroProvider? heroProvider = context?.read<HeroProvider>();
+
+    heroProvider?.setLoading(true);
+
+    final response = await _heroService?.createHero(heroModel, file);
+
+    if (response?["statusCode"] >= 200 && response?["statusCode"] <= 299) {
+      Future.delayed(
+          Duration(seconds: 5), () => heroProvider?.setLoading(false));
+    } else {
+      Future.delayed(
+          Duration(seconds: 5), () => heroProvider?.setLoading(false));
+      return Future.error(response?["errorContent"]);
+    }
   }
 }

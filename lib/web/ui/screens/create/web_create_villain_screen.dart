@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:my_hero_academia/web/controller/villain_controller.dart';
 import 'package:my_hero_academia/web/providers/villain_provider.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +25,7 @@ class _WebCreateVillainScreenState extends State<WebCreateVillainScreen> {
   TextEditingController villainNameController = TextEditingController(text: "");
   TextEditingController villainRankController = TextEditingController(text: "");
   TextEditingController villainAgeController = TextEditingController(text: "");
-
+  Map<String, dynamic>? fileToUpload;
   Uint8List? bytes;
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -37,6 +39,7 @@ class _WebCreateVillainScreenState extends State<WebCreateVillainScreen> {
       String fileName = result.files.first.name;
       setState(() {
         bytes = fileBytes;
+        fileToUpload = {"bytes": bytes, "fileName": fileName};
       });
     }
   }
@@ -136,7 +139,7 @@ class _WebCreateVillainScreenState extends State<WebCreateVillainScreen> {
         ),
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
-          //padding: EdgeInsets.only(top: ),
+          //padding: EdgeInsets.only(top: 0),
           child: Column(
             children: [
               Container(
@@ -154,255 +157,250 @@ class _WebCreateVillainScreenState extends State<WebCreateVillainScreen> {
                     ),
                   ],
                 ),
-                child: ListView(
-                  padding: EdgeInsets.only(top: 30),
-                  children: [
-                    Container(
-                      width: screenSize.width * 0.1,
-                      margin: EdgeInsets.only(left: 50, right: 50),
-                      child: TextFormField(
-                        controller: trueNameController,
-                        onChanged: (value) =>
-                            providerVillain.setTrueName(value),
-                        style: TextStyle(
-                          color: Colors.yellow,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "TrueName",
-                          hintStyle: TextStyle(
-                            color: Colors.yellow,
-                          ),
-                          labelText: "TrueName",
-                          labelStyle: TextStyle(
-                            color: Colors.yellow,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide: BorderSide(
-                              color: Colors.yellow,
-                              width: 1,
+                child: providerVillain.isLoading != null &&
+                        providerVillain.isLoading!
+                    ? Container(
+                        height: screenSize.height,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: SizedBox(
+                                height: 200,
+                                child: LoadingIndicator(
+                                  strokeWidth: 5,
+                                  indicatorType:
+                                      Indicator.ballClipRotateMultiple,
+                                  colors: [
+                                    Colors.yellow,
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide:
-                                BorderSide(color: Colors.yellow, width: 1),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: screenSize.width * 0.1,
-                      margin: EdgeInsets.only(
-                        left: 50,
-                        right: 50,
-                        top: 20,
-                      ),
-                      child: TextFormField(
-                        controller: lastNameController,
-                        onChanged: (value) =>
-                            providerVillain.setLastName(value),
-                        style: TextStyle(
-                          color: Colors.yellow,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "LastName",
-                          hintStyle: TextStyle(
-                            color: Colors.yellow,
-                          ),
-                          labelText: "LastName",
-                          labelStyle: TextStyle(
-                            color: Colors.yellow,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide: BorderSide(
-                              color: Colors.yellow,
-                              width: 1,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide:
-                                BorderSide(color: Colors.yellow, width: 1),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: screenSize.width * 0.1,
-                      margin: EdgeInsets.only(
-                        left: 50,
-                        right: 50,
-                        top: 20,
-                      ),
-                      child: TextFormField(
-                        controller: villainNameController,
-                        onChanged: (value) =>
-                            providerVillain.setVillainName(value),
-                        style: TextStyle(
-                          color: Colors.yellow,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "VillainName",
-                          hintStyle: TextStyle(
-                            color: Colors.yellow,
-                          ),
-                          labelText: "VillainName",
-                          labelStyle: TextStyle(
-                            color: Colors.yellow,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide: BorderSide(
-                              color: Colors.yellow,
-                              width: 1,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide:
-                                BorderSide(color: Colors.yellow, width: 1),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: screenSize.width * 0.1,
-                      margin: EdgeInsets.only(
-                        left: 50,
-                        right: 50,
-                        top: 20,
-                      ),
-                      child: TextFormField(
-                        controller: villainRankController,
-                        onChanged: (value) =>
-                            providerVillain.setVillainRank(int.tryParse(value)),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                          color: Colors.yellow,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "VillainRank",
-                          hintStyle: TextStyle(
-                            color: Colors.yellow,
-                          ),
-                          labelText: "VillainRank",
-                          labelStyle: TextStyle(
-                            color: Colors.yellow,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide: BorderSide(
-                              color: Colors.yellow,
-                              width: 1,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide:
-                                BorderSide(color: Colors.yellow, width: 1),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: screenSize.width * 0.1,
-                      margin: EdgeInsets.only(
-                        left: 50,
-                        right: 50,
-                        top: 20,
-                      ),
-                      child: TextFormField(
-                        controller: villainAgeController,
-                        onChanged: (value) =>
-                            providerVillain.setVillainAge(int.tryParse(value)),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                          color: Colors.yellow,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Age",
-                          hintStyle: TextStyle(
-                            color: Colors.yellow,
-                          ),
-                          labelText: "Age",
-                          labelStyle: TextStyle(
-                            color: Colors.yellow,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide: BorderSide(
-                              color: Colors.yellow,
-                              width: 1,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(7),
-                            borderSide:
-                                BorderSide(color: Colors.yellow, width: 1),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (bytes == null)
-                      Container(
-                        height: 50,
-                        width: screenSize.width * 0.1,
-                        margin: EdgeInsets.only(
-                          left: 50,
-                          right: 50,
-                          top: 30,
-                        ),
-                        child: ElevatedButton(
-                          child: Text(
-                            "Choose a thumb for this villain",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          onPressed: pickFile,
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.yellow,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
+                          ],
                         ),
                       )
-                    else
-                      Container(
-                        margin: EdgeInsets.only(
-                          left: 50,
-                          right: 50,
-                        ),
-                        child: Wrap(
-                          children: [
+                    : ListView(
+                        padding: EdgeInsets.only(top: 30),
+                        children: [
+                          Container(
+                            width: screenSize.width * 0.1,
+                            margin: EdgeInsets.only(left: 50, right: 50),
+                            child: TextFormField(
+                              controller: trueNameController,
+                              onChanged: (value) =>
+                                  providerVillain.setTrueName(value),
+                              style: TextStyle(
+                                color: Colors.yellow,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "TrueName",
+                                hintStyle: TextStyle(
+                                  color: Colors.yellow,
+                                ),
+                                labelText: "TrueName",
+                                labelStyle: TextStyle(
+                                  color: Colors.yellow,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                    color: Colors.yellow,
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                      color: Colors.yellow, width: 1),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: screenSize.width * 0.1,
+                            margin: EdgeInsets.only(
+                              left: 50,
+                              right: 50,
+                              top: 20,
+                            ),
+                            child: TextFormField(
+                              controller: lastNameController,
+                              onChanged: (value) =>
+                                  providerVillain.setLastName(value),
+                              style: TextStyle(
+                                color: Colors.yellow,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "LastName",
+                                hintStyle: TextStyle(
+                                  color: Colors.yellow,
+                                ),
+                                labelText: "LastName",
+                                labelStyle: TextStyle(
+                                  color: Colors.yellow,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                    color: Colors.yellow,
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                      color: Colors.yellow, width: 1),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: screenSize.width * 0.1,
+                            margin: EdgeInsets.only(
+                              left: 50,
+                              right: 50,
+                              top: 20,
+                            ),
+                            child: TextFormField(
+                              controller: villainNameController,
+                              onChanged: (value) =>
+                                  providerVillain.setVillainName(value),
+                              style: TextStyle(
+                                color: Colors.yellow,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "VillainName",
+                                hintStyle: TextStyle(
+                                  color: Colors.yellow,
+                                ),
+                                labelText: "VillainName",
+                                labelStyle: TextStyle(
+                                  color: Colors.yellow,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                    color: Colors.yellow,
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                      color: Colors.yellow, width: 1),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: screenSize.width * 0.1,
+                            margin: EdgeInsets.only(
+                              left: 50,
+                              right: 50,
+                              top: 20,
+                            ),
+                            child: TextFormField(
+                              controller: villainRankController,
+                              onChanged: (value) => providerVillain
+                                  .setVillainRank(int.tryParse(value)),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(
+                                color: Colors.yellow,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "VillainRank",
+                                hintStyle: TextStyle(
+                                  color: Colors.yellow,
+                                ),
+                                labelText: "VillainRank",
+                                labelStyle: TextStyle(
+                                  color: Colors.yellow,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                    color: Colors.yellow,
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                      color: Colors.yellow, width: 1),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: screenSize.width * 0.1,
+                            margin: EdgeInsets.only(
+                              left: 50,
+                              right: 50,
+                              top: 20,
+                            ),
+                            child: TextFormField(
+                              controller: villainAgeController,
+                              onChanged: (value) => providerVillain
+                                  .setVillainAge(int.tryParse(value)),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(
+                                color: Colors.yellow,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Age",
+                                hintStyle: TextStyle(
+                                  color: Colors.yellow,
+                                ),
+                                labelText: "Age",
+                                labelStyle: TextStyle(
+                                  color: Colors.yellow,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                    color: Colors.yellow,
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  borderSide: BorderSide(
+                                      color: Colors.yellow, width: 1),
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (bytes == null)
                             Container(
-                              width: screenSize.width * 0.5,
                               height: 50,
-                              margin: EdgeInsets.only(top: 50),
+                              width: screenSize.width * 0.1,
+                              margin: EdgeInsets.only(
+                                left: 50,
+                                right: 50,
+                                top: 30,
+                              ),
                               child: ElevatedButton(
                                 child: Text(
-                                  "Clear Thumb",
+                                  "Choose a thumb for this villain",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                onPressed: clearThumb,
+                                onPressed: pickFile,
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.yellow,
                                   shape: RoundedRectangleBorder(
@@ -410,46 +408,80 @@ class _WebCreateVillainScreenState extends State<WebCreateVillainScreen> {
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 50,
-                            ),
-                            Image.memory(
-                              bytes!,
-                              height: 150,
-                              width: 150,
                             )
-                          ],
-                        ),
+                          else
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: 50,
+                                right: 50,
+                              ),
+                              child: Wrap(
+                                children: [
+                                  Container(
+                                    width: screenSize.width * 0.5,
+                                    height: 50,
+                                    margin: EdgeInsets.only(top: 50),
+                                    child: ElevatedButton(
+                                      child: Text(
+                                        "Clear Thumb",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      onPressed: clearThumb,
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.yellow,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 50,
+                                  ),
+                                  Image.memory(
+                                    bytes!,
+                                    height: 150,
+                                    width: 150,
+                                  )
+                                ],
+                              ),
+                            ),
+                          Container(
+                            height: 50,
+                            width: screenSize.width * 0.1,
+                            margin: EdgeInsets.only(
+                              left: 50,
+                              right: 50,
+                              top: 30,
+                              bottom: 20,
+                            ),
+                            child: ElevatedButton(
+                              child: Text(
+                                "Create Villain",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              onPressed: () async =>
+                                  villainController?.createVillain(
+                                providerVillain.sendVillainInfoToAPI()!,
+                                fileToUpload != null ? fileToUpload! : null,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.yellow,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    Container(
-                      height: 50,
-                      width: screenSize.width * 0.1,
-                      margin: EdgeInsets.only(
-                        left: 50,
-                        right: 50,
-                        top: 30,
-                      ),
-                      child: ElevatedButton(
-                        child: Text(
-                          "Create Villain",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        onPressed: () async =>
-                            print(providerVillain.sendVillainInfoToAPI()),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.yellow,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
               ),
             ],
           ),

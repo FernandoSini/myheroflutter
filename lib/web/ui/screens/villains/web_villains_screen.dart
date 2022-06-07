@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:my_hero_academia/web/controller/villain_controller.dart';
-import 'package:my_hero_academia/web/models/VillainModel.dart';
+import 'package:my_hero_academia/web/models/villain_model.dart';
 import 'package:my_hero_academia/web/ui/widgets/villain_tumbnail_widget.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
@@ -14,10 +14,15 @@ class WebVillainsScreen extends StatefulWidget {
 
 class _WebVillainsScreenState extends State<WebVillainsScreen> {
   VillainController? villainController;
+
+  Future? _futureData;
   @override
   void initState() {
     villainController = VillainController(context: context);
     super.initState();
+    _futureData = Future.delayed(Duration(seconds: 5), () {
+      return villainController?.fetchAllVillains();
+    });
   }
 
   @override
@@ -106,9 +111,7 @@ class _WebVillainsScreenState extends State<WebVillainsScreen> {
           ),
         ),
         child: FutureBuilder(
-          future: Future.delayed(Duration(seconds: 5), () {
-            return villainController?.fetchAllVillains();
-          }),
+          future: _futureData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Container(

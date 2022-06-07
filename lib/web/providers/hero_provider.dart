@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_hero_academia/web/models/Hero.dart';
+import 'package:my_hero_academia/web/models/hero.dart';
 
 class HeroProvider extends ChangeNotifier {
   String? trueNameText;
@@ -12,11 +12,11 @@ class HeroProvider extends ChangeNotifier {
   int? get heroRank => heroRankValue;
   int? heroAgeValue;
   int? get heroAge => heroAgeValue;
-  bool? creatingHero = false;
-  bool? get isHeroCreated => creatingHero;
+  bool? loading = false;
+  bool? get isLoading => loading;
 
-  void setHeroCreated(bool? newValue) {
-    creatingHero = newValue;
+  void setLoading(bool? newValue) {
+    loading = newValue;
     notifyListeners();
   }
 
@@ -45,15 +45,15 @@ class HeroProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, dynamic>? sendHeroInfoToAPI() {
+  HeroModel? sendHeroInfoToAPI() {
     HeroModel heroInfo = HeroModel(
-        trueName: trueName ?? "",
-        lastName: lastName ?? "",
-        heroName: heroName ?? "",
+        trueName: trueName,
+        lastName: lastName,
+        heroName: heroName,
         heroRank: heroRank ?? 0,
         age: heroAge ?? 0);
 
-    return heroInfo.toJson();
+    return heroInfo;
   }
 
   HeroModel? hero;
@@ -71,14 +71,13 @@ class HeroProvider extends ChangeNotifier {
     setTrueName(null);
     setLastName(null);
     setHeroName(null);
-    setHeroCreated(false);
+    setLoading(null);
     setHeroRank(null);
     setHeroAge(null);
   }
 
   clearHero() {
     setHero(null);
-    setHeroCreated(false);
   }
 
   clearAll() {

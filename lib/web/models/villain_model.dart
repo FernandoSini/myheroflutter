@@ -1,33 +1,33 @@
 import 'dart:convert';
 
-import 'hero_thumbnail.dart';
+import 'package:my_hero_academia/web/models/villain_thumbnail.dart';
 
-class HeroModel {
+class VillainModel {
   String? id;
   String? trueName;
   String? lastName;
-  String? heroName;
-  int? heroRank;
+  String? villainName;
+  int? villainRank;
   int? age;
   List<String>? images;
-  HeroThumbnail? heroThumbnail;
+  VillainThumbnail? villainThumbnail;
 
-  HeroModel(
+  VillainModel(
       {this.id,
       this.trueName,
       this.lastName,
-      this.heroName,
-      this.heroRank,
+      this.villainName,
+      this.villainRank,
       this.age,
-      this.heroThumbnail});
+      this.villainThumbnail});
 
-  HeroModel.fromJson(Map<String, dynamic> json) {
+  VillainModel.fromJson(Map<String, dynamic> json) {
     id = json["id"] != null ? json["id"] : null;
     trueName = json["trueName"];
     lastName = json["lastName"];
-    heroName = json["heroName"];
-    heroRank = json["heroRank"] != null
-        ? int.tryParse(json["heroRank"].toString())
+    villainName = json["villainName"];
+    villainRank = json["villainRank"] != null
+        ? int.tryParse(json["villainRank"].toString())
         : null;
     age = json["age"] != null ? int.tryParse(json["age"].toString()) : null;
     if (json['images'] != null) {
@@ -36,8 +36,8 @@ class HeroModel {
         images?.add(v);
       });
     }
-    heroThumbnail = json["heroThumbnail"] != null
-        ? HeroThumbnail.fromJson(json["heroThumbnail"])
+    villainThumbnail = json["villainThumbnail"] != null
+        ? VillainThumbnail.fromJson(json["villainThumbnail"])
         : null;
   }
 
@@ -52,13 +52,13 @@ class HeroModel {
     if (lastName != null) {
       data["lastName"] = lastName;
     }
-    if (heroName != null) {
-      data["heroName"] = heroName;
+    if (villainName != null) {
+      data["villainName"] = villainName;
     }
-    if (heroRank != null && heroRank! > 0) {
-      data["heroRank"] = heroRank;
+    if (villainRank != null && villainRank! > 0) {
+      data["villainRank"] = villainRank;
     }
-    if (age != null && age! > 0) {
+    if (age != null && villainRank! > 0) {
       data["age"] = age;
     }
     if (images != null) {
@@ -78,15 +78,15 @@ class HeroModel {
     if (lastName != null) {
       data["lastName"] = lastName!;
     }
-    if (heroName != null) {
-      data["heroName"] = heroName!;
+    if (villainName != null) {
+      data["villainName"] = villainName!;
     }
-    if (heroRank != null && heroRank! > 0) {
-      data["heroRank"] = heroRank.toString();
+    if (villainRank != null && villainRank! > 0) {
+      data["villainRank"] = villainRank.toString();
     } else {
-      data["heroRank"] = 0.toString();
+      data["villlainRank"] = 0.toString();
     }
-    if (age != null && age! > 0) {
+    if (age != null && villainRank! > 0) {
       data["age"] = age.toString();
     }
     if (images != null) {
@@ -95,12 +95,14 @@ class HeroModel {
     return data;
   }
 
-  static List<HeroModel> parseJsonToList(String responseBody) {
+  static List<VillainModel> parseJsonToList(String responseBody) {
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<HeroModel>((json) => HeroModel.fromJson(json)).toList();
+    return parsed
+        .map<VillainModel>((json) => VillainModel.fromJson(json))
+        .toList();
   }
 
-  static String parseListToJson(List<HeroModel> heroesList) {
-    return jsonEncode(heroesList.map((e) => e.toJson()).toList());
+  static String parseListToJson(List<VillainModel> villainList) {
+    return jsonEncode(villainList.map((e) => e.toJson()).toList());
   }
 }

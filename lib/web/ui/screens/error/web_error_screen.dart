@@ -1,4 +1,6 @@
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
+import 'package:outlined_text/outlined_text.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
 class WebErrorScreen extends StatefulWidget {
@@ -103,33 +105,18 @@ class _WebErrorScreenState extends State<WebErrorScreen> {
                   const SizedBox(),
                   Column(
                     children: [
-                      Stack(
-                        children: [
-                          Container(
-                            color: Colors.transparent,
-                            child: Text(
-                              "404",
-                              style: TextStyle(
-                                wordSpacing: 20,
-                                fontFamily: 'MyHeroFont',
-                                fontSize: 180,
-                                foreground: Paint()
-                                  ..style = PaintingStyle.stroke
-                                  ..strokeWidth = 10
-                                  ..color = Colors.black,
-                              ),
-                            ),
+                      BorderedText(
+                        child: Text(
+                          "404",
+                          style: const TextStyle(
+                            wordSpacing: 20,
+                            fontFamily: 'MyHeroFont',
+                            fontSize: 180,
+                            color: Colors.yellow,
                           ),
-                          Text(
-                            "404",
-                            style: const TextStyle(
-                              wordSpacing: 20,
-                              fontFamily: 'MyHeroFont',
-                              fontSize: 180,
-                              color: Colors.yellow,
-                            ),
-                          ),
-                        ],
+                        ),
+                        strokeColor: Colors.black,
+                        strokeWidth: 10,
                       ),
                       Stack(
                         children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/VillainModel.dart';
+import '../models/villain_model.dart';
 
 class VillainProvider extends ChangeNotifier {
   String? trueNameText;
@@ -13,11 +13,11 @@ class VillainProvider extends ChangeNotifier {
   int? get villainRank => villainRankValue;
   int? villainAgeValue;
   int? get villainAge => villainAgeValue;
-  bool? creatingVillain = false;
-  bool? get isVillainCreated => creatingVillain;
+  bool? loading = false;
+  bool? get isLoading => loading;
 
-  void setVillainCreated(bool? newValue) {
-    creatingVillain = newValue;
+  void setIsLoading(bool? newValue) {
+    loading = newValue;
     notifyListeners();
   }
 
@@ -46,7 +46,7 @@ class VillainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, dynamic>? sendVillainInfoToAPI() {
+  VillainModel? sendVillainInfoToAPI() {
     VillainModel? villain = VillainModel(
         trueName: trueName ?? "",
         lastName: lastName ?? "",
@@ -54,7 +54,7 @@ class VillainProvider extends ChangeNotifier {
         villainRank: villainRank ?? 0,
         age: villainAge ?? 0);
 
-    return villain.toJson();
+    return villain;
   }
 
   VillainModel? villain;
@@ -71,7 +71,7 @@ class VillainProvider extends ChangeNotifier {
   clearForm() {
     setTrueName(null);
     setLastName(null);
-    setVillainCreated(false);
+    setIsLoading(false);
     setVillainName(null);
     setVillainRank(null);
     setVillainAge(null);
@@ -79,7 +79,6 @@ class VillainProvider extends ChangeNotifier {
 
   clearVillain() {
     setVillain(null);
-    setVillainCreated(false);
   }
 
   clearAll() {
