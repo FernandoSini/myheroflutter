@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
-import '../../models/VillainModel.dart';
+import '../../models/villain_model.dart';
 
 class VillainThumbnailWidget extends StatefulWidget {
   const VillainThumbnailWidget({Key? key, this.villain}) : super(key: key);
@@ -18,12 +18,21 @@ class _VillainThumbnailWidgetState extends State<VillainThumbnailWidget> {
     var screenSize = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
-       QR.toName("VillainDetails", params: {'villainName':widget.villain!.villainName},);
+        QR.toName(
+          "VillainDetails",
+          params: {'villainName': widget.villain!.villainName},
+        );
       },
       child: Container(
         height: screenSize.height * 0.15,
         width: screenSize.width * 0.09,
         decoration: BoxDecoration(
+          image: widget.villain!.villainThumbnail != null
+              ? DecorationImage(
+                  image:
+                      NetworkImage(widget.villain!.villainThumbnail!.content!),
+                )
+              : null,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.5),

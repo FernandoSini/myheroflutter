@@ -2,7 +2,7 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:my_hero_academia/web/controller/villain_controller.dart';
-import 'package:my_hero_academia/web/models/VillainModel.dart';
+import 'package:my_hero_academia/web/models/villain_model.dart';
 import 'package:my_hero_academia/web/ui/widgets/custom_scroll_bar.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 

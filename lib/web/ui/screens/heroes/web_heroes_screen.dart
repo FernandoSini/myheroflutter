@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:my_hero_academia/web/controller/hero_controller.dart';
-import 'package:my_hero_academia/web/models/Hero.dart';
+import 'package:my_hero_academia/web/models/hero.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
 import '../../widgets/hero_tumbnail_widget.dart';
@@ -193,6 +193,7 @@ class _WebHeroesScreenState extends State<WebHeroesScreen> {
                 snapshot.data != null &&
                 !snapshot.hasError) {
               List<HeroModel>? heroList = snapshot.data as List<HeroModel>;
+
               return ListView(
                 children: [
                   Container(

@@ -1,6 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:my_hero_academia/web/models/VillainModel.dart';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:my_hero_academia/web/models/villain_model.dart';
+import 'package:my_hero_academia/web/providers/villain_provider.dart';
+import 'package:provider/provider.dart';
 import '../service/villain_service.dart';
 
 class VillainController {
@@ -42,7 +45,21 @@ class VillainController {
     }
   }
 
-  Future<void> createVillain(VillainModel villain) async {
-    final serviceResponse = await _villainService?.createVillain(villain);
+  Future<void> createVillain(
+      VillainModel villain, Map<String, dynamic>? fileToUpload) async {
+    VillainProvider provider = context!.read<VillainProvider>();
+
+    provider.setIsLoading(true);
+    //verifiying if villain was created
+    final serviceResponse =
+        await _villainService?.createVillain(villain, fileToUpload);
+
+    if (serviceResponse?["statusCode"] >= 200 &&
+        serviceResponse?["statusCode"] <= 299) {
+      Future.delayed(Duration(seconds: 5), () => provider.setIsLoading(false));
+    } else {
+      Future.delayed(Duration(seconds: 5), () => provider.setIsLoading(false));
+      Future.error(serviceResponse?["errorContent"]);
+    }
   }
 }

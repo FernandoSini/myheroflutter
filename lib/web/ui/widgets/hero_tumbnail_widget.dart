@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_hero_academia/web/models/Hero.dart';
+import 'package:my_hero_academia/web/models/hero.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
 class HeroThumbnailWidget extends StatefulWidget {
@@ -21,6 +21,7 @@ class _HeroThumbnailWidgetState extends State<HeroThumbnailWidget> {
   bool onHover = false;
   @override
   Widget build(BuildContext context) {
+    print(widget.hero?.heroThumbnail?.toJson());
     var screenSize = MediaQuery.of(context).size;
     return InkWell(
       onHover: (hover) {
@@ -38,6 +39,11 @@ class _HeroThumbnailWidgetState extends State<HeroThumbnailWidget> {
         height: screenSize.height * 0.15,
         width: screenSize.width * 0.09,
         decoration: BoxDecoration(
+          image: widget.hero!.heroThumbnail != null
+              ? DecorationImage(
+                  image: NetworkImage(widget.hero!.heroThumbnail!.content!),
+                )
+              : null,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.5),
