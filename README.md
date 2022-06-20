@@ -2,6 +2,8 @@
 
 My hero academia project using flutter for web and mobile
 
+Link for website: https://fernandosini.github.io/myheroflutter
+
 ## Getting Started
 
 This project is a showcase project using flutter for web and mobile.
